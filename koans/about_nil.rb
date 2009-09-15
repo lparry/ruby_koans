@@ -41,6 +41,8 @@ class AboutNil < EdgeCase::Koan
     # or
     #    obj == nil
     # Why?
+    
+    #  the seem to be mostly equivilant although it would be possible for an object to override the nil? method and lie by returning true, while '== nil' will always be honest
   end
 
 end
