@@ -13,8 +13,33 @@ require 'edgecase'
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
 class Proxy
+  
   def initialize(target_object)
     @object = target_object
+    @messages_array = []
+  end
+  
+  def method_missing(method_name, *args, &block)
+    
+    if @object.respond_to? method_name
+      @messages_array.push method_name
+      @object.__send__ method_name, *args, &block
+    else
+      raise NoMethodError
+    end
+  end
+  
+  def messages
+    return @messages_array.uniq
+  end
+  
+  def called? method
+    @messages_array.include? method
+  end
+  
+  def number_of_times_called method
+    temp = @messages_array.reject {|m| method != m }
+    temp.size
   end
 end
 
