@@ -29,8 +29,41 @@ require 'edgecase'
 #
 # Your goal is to write the score method.
 
+class Array
+  def remove(item)
+    p self
+    index = self.index(item)
+    self.delete_at(index) unless index.nil?
+  end
+end
+
 def score(dice)
+  score=0
   # You need to write this method
+  counts = [0,0,0,0,0,0,0] # actually 7 elements long, but will be lazy and ignore 0 and just use 1-6
+
+  multipliers = { 1 => 100, 5 => 50}
+
+  dice.each do |side|
+    counts[side] += 1
+  end
+  
+  (1..6).each do |side|
+    if counts[side] >= 3
+      
+      if side == 1
+        score += 1000
+      else
+        score += side * 100
+      end
+      counts[side] -= 3
+    end
+
+    score += counts[side] * multipliers[side] unless multipliers[side].nil?
+    
+  end
+
+  score
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
@@ -67,7 +100,7 @@ class AboutScoringAssignment < EdgeCase::Koan
   end
 
   def test_score_of_mixed_is_sum
-    assert_equal 50, score([2,5,2,2,3])
+    assert_equal 250, score([2,5,2,2,3]) # I'm pretty sure this one was wrong, I calculate 250 based on the rules at the top
     assert_equal 550, score([5,5,5,5])
   end
 
